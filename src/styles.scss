@@ -1,0 +1,29 @@
+body {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+  align-items: stretch;
+  height: 100%;
+}
+
+html {
+  height: 100%;
+}
+
+app-root {
+  order: 0;
+  flex: 1 1 auto;
+  align-self: auto;
+  display: block;
+}
+
+.flexer {
+  width: 100%;
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}

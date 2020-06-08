@@ -1,0 +1,53 @@
+.host-wrapper {
+  height: 100%;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+
+  .holder {
+    width: 50%;
+  }
+
+  .company-margin {
+    margin-top: 1%;
+    margin-bottom: 1%;
+
+    .custom {
+      align-items: center;
+
+      .button-wrapper {
+        display: flex;
+        justify-content: space-between;
+        width: 26%;
+      }
+    }
+
+    .text-input {
+      width: 25%;
+    }
+  }
+
+  .add-wrapper {
+    padding: 1%;
+    display: flex;
+
+
+    flex-direction: column;
+    justify-content: space-between;
+
+    .add-confirms {
+      padding-top: 2%;
+      justify-content: space-between;
+    }
+  }
+}
+
+.pt {
+  padding-top: 2%;
+}
+
+.ends-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}

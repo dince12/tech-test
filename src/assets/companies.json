@@ -1,0 +1,26 @@
+[
+  {
+    "companyName": "Google",
+    "sector": "IT",
+    "creationDay": "2014-01-01",
+    "country": "US",
+    "customers": 1000,
+    "active": false
+  },
+  {
+    "companyName": "Service Power",
+    "sector": "IT",
+    "creationDay": "2015-01-01",
+    "country": "UK",
+    "customers": 345,
+    "active": true
+  },
+  {
+    "companyName": "Amazon",
+    "sector": "IT",
+    "creationDay": "2016-01-01",
+    "country": "US",
+    "customers": 79,
+    "active": false
+  }
+]
