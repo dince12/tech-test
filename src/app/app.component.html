@@ -1,91 +1,40 @@
-<div class="host-wrapper">
-  <div class="flexer flex-column holder">
-
-
-      <button *ngIf="localCompanies.length" (click)="sortListByName()">Sort By Name</button>
-
-      <!-- container for outer directive, as only one allowed. Wraps it up -->
-      <ng-container *ngIf="localCompanies.length">
-
-        <div class="flexer company-margin" *ngFor="let company of localCompanies">
-
-          <div class="flexer flex-column custom">
-            <input class="text-input" (ngModelChange)="isValid($event, company, 'companyName')"
-                   [disabled]="!company.isEditing" [ngModel]="company.companyName" value="{{ company.companyName }}">
-
-            <input class="text-input" (ngModelChange)="isValid($event, company, 'sector')"
-                   [disabled]="!company.isEditing" [ngModel]="company.sector" value="{{ company.sector }}">
-
-            <input class="text-input" (ngModelChange)="isValid($event, company, 'creationDay')"
-                   [disabled]="!company.isEditing" [ngModel]="company.creationDay" value="{{ company.creationDay }}">
-
-            <input class="text-input" (ngModelChange)="isValid($event, company, 'country')"
-                   [disabled]="!company.isEditing" [ngModel]="company.country" value="{{ company.country }}">
-
-            <input class="text-input" (ngModelChange)="isValid($event, company, 'customers')"
-                   [disabled]="!company.isEditing" [ngModel]="company.customers" value="{{ company.customers}}">
-
-            <input class="text-input" (ngModelChange)="isValid($event, company, 'active')"
-                   [disabled]="!company.isEditing" [ngModel]="company.active" value="{{ company.active }}">
-
-            <div class="button-wrapper pt">
-              <button (click)="removeCompany(company)">
-                remove
-              </button>
-
-              <button (click)="openEdit(company)(company)">
+<div class="host-wrapper d-flex">
+  <div class="flex-column holder justify-content-between p-4">
+    <div class="d-flex flex-column justify-content-start">
+      <div *ngIf="!companyService.getList.length" class="no-companies">
+        <span>No Companies Found</span>
+      </div>
+      <div class="top-buttons-wrapper p-2 mb-4">
+        <div class="d-flex flex-column justify-content-between">
+          <button class="btn btn-primary mb-2" (click)="openAddModal()">Add new Company</button>
+        </div>
+        <div *ngIf="companyService.getList.length" class="d-flex justify-content-between">
+          <button class="btn btn-primary" (click)="removeEnds(true)">Remove First</button>
+          <button class="btn btn-primary" *ngIf="companyService.getList.length" (click)="sortListByName()">Sort By Name</button>
+          <button class="btn btn-primary" (click)="removeEnds()">Remove End</button>
+        </div>
+      </div>
+      <input *ngIf="companyService.getList.length" placeholder="Search..." class="search-input mb-2" [(ngModel)]="filter">
+      <div class="repeat-wrapper">
+        <div class="d-flex test w-100" [@anim]="companyService.getList" *ngFor="let company of companyService.getList | filterPipe: filter">
+          <div class="d-flex custom-row justify-content-between w-100 p-2">
+            <span class="w-100">{{ company.companyName }}</span>
+            <span class="w-100">{{ company.sector }}</span>
+            <span class="w-100">{{ company.creationDay }}</span>
+            <span class="w-100">{{ company.country }}</span>
+            <span class="w-100">{{ company.customers }}</span>
+            <span class="w-100">{{ company.active }}</span>
+            <div class="d-flex justify-content-between align-items-center">
+              <button class="btn btn-primary mr-2" (click)="openEdit(company)">
                 <span>{{ company.isEditing ? 'Confirm' : 'Edit' }}</span>
+              </button>
+              <button class="btn btn-primary" (click)="removeCompany(company)">
+                remove
               </button>
             </div>
           </div>
-
         </div>
-      </ng-container>
-
-      <div class="add-wrapper">
-        <button (click)="displayAddInputs = !displayAddInputs">Add new Company</button>
-      </div>
-
-      <div *ngIf="displayAddInputs">
-
-        <form [formGroup]="companyForm" class="add-wrapper" (ngSubmit)="addCompany()">
-
-          <label>Company Name: </label>
-          <input placeholder="Name" formControlName="companyName">
-
-          <label>Company sector: </label>
-          <input placeholder="Sector" formControlName="sector">
-
-          <label>Company creation day: </label>
-          <input placeholder="Creation Day" formControlName="creationDay">
-
-          <label>Company country: </label>
-          <input placeholder="Country" formControlName="country">
-
-          <label>Company customers: </label>
-          <input type='number' placeholder="Customer" formControlName="customers">
-
-          <label>Company active: </label>
-          <input placeholder="Active" formControlName="active">
-
-        </form>
-
-        <div class="flexer add-confirms ends-buttons">
-          <button (click)="closeAdd()">Close</button>
-          <button [disabled]="!companyForm.valid" (click)="addCompany()">Confirm</button>
-        </div>
-      </div>
-
-      <!-- only to display when no companies are found -->
-      <div *ngIf="!localCompanies.length" class="no-companies">
-        <span>No Companies Found</span>
-      </div>
-
-      <!-- only to display whenthere are companies to remove -->
-      <div *ngIf="localCompanies.length" class="ends-buttons pt">
-        <button (click)="removeEnds(true)">Remove First</button>
-        <button (click)="removeEnds()">Remove End</button>
       </div>
     </div>
-
+  </div>
 </div>

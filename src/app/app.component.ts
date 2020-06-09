@@ -1,6 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {CompanyService} from '../service/company.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
+
+import { CompanyService } from '../service/company.service';
+import { AddModalComponent } from './modals/add-modal/add-modal.component';
+
+import { animate, sequence, style, transition, trigger } from '@angular/animations';
 
 export interface ICompany {
   sector: string;
@@ -15,25 +19,52 @@ export interface ICompany {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  animations: [
+    trigger('anim', [
+      transition('* => void', [
+        style({height: '*', opacity: '1', transform: 'translateX(0)', 'box-shadow': '0 1px 4px 0 rgba(0, 0, 0, 0.3)'}),
+        sequence([
+          animate('.25s ease', style({height: '*', opacity: '.2', transform: 'translateX(20px)', 'box-shadow': 'none'})),
+          animate('.1s ease', style({height: '0', opacity: 0, transform: 'translateX(20px)', 'box-shadow': 'none'}))
+        ])
+      ]),
+      transition('void => active', [
+        style({height: '0', opacity: '0', transform: 'translateX(20px)', 'box-shadow': 'none'}),
+        sequence([
+          animate('.1s ease', style({height: '*', opacity: '.2', transform: 'translateX(20px)', 'box-shadow': 'none'})),
+          animate('.35s ease', style({height: '*', opacity: 1, transform: 'translateX(0)', 'box-shadow': '0 1px 4px 0 rgba(0, 0, 0, 0.3)'}))
+        ])
+      ])
+    ])
+  ]
 })
 
 export class AppComponent implements OnInit {
 
-  public companyForm: FormGroup;
-
-  public localCompanies: ICompany[] = [];
-  public displayAddInputs: boolean = false;
+  public filter: string;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private companyService: CompanyService
+    private modalService: NgbModal,
+    public companyService: CompanyService
   ) {
   }
 
   public removeCompany(company): void {
     // Let the service holding the data interact.
     this.companyService.removeCompany(company);
+  }
+
+  public openAddModal(): void {
+    const modalRef = this.modalService.open(AddModalComponent, {size: 'lg'});
+    modalRef.componentInstance.title = 'Add Company';
+  }
+
+  public openEdit(company: ICompany): void {
+    const modalRef = this.modalService.open(AddModalComponent, {size: 'lg'});
+
+    modalRef.componentInstance.company = company;
+    modalRef.componentInstance.title = 'Edit Company';
   }
 
   public sortListByName(): void {
@@ -51,65 +82,14 @@ export class AppComponent implements OnInit {
     this.companyService.removeEitherEnd(first);
   }
 
-  public addCompany(): void {
-    // push the object to the list of companies.
-    this.companyService.getList.push(this.companyForm.value);
-
-    // clear the form and close the add box.
-    this.companyForm.reset();
-    this.displayAddInputs = !this.displayAddInputs;
-  }
-
-  public isValid(x, company, attr): void {
-    // this needs much better validation and error handling.
-    // wanted to complete in a time that would allow for an understanding to pace.
-    company[attr] = x;
-  }
-
-  public openEdit(company: ICompany): void {
-    // this needs much better validation and error handling.
-    // wanted to complete in a time that would allow for an understanding to pace.
-    if (company.isEditing) {
-      company.isEditing = !company.isEditing;
-      return;
-    }
-
-    // toggle the the other to not editing.
-    this.companyService.getList
-      .forEach((comp: ICompany) => comp.isEditing = false);
-
-    company.isEditing = !company.isEditing;
-  }
-
-  public closeAdd(): void {
-    this.companyForm.reset();
-    this.displayAddInputs = !this.displayAddInputs;
-  }
-
   public ngOnInit(): void {
-
-    // instantiate the company form
-    this.companyForm = this.formBuilder.group({
-      companyName: ['', Validators.required],
-      sector: ['', Validators.required],
-      creationDay: ['', Validators.required],
-      country: ['', Validators.required],
-      // Customers input must be greater than -1 and be a number.
-      customers: ['', [Validators.required, Validators.min(0)]],
-      active: ['', Validators.required]
-    });
 
     // Make the first call to the "server" to get some data and store this in the service.
     this.companyService.getJSON().subscribe((companies: ICompany[]) => {
 
       if (companies && companies.length) {
-        // give each a flag to toggle an edit.
-        companies.map((data: ICompany) => data.isEditing = false);
-
+        // set the service to hold the companies
         this.companyService.setList = companies;
-
-        // Point a local variable to service.
-        this.localCompanies = this.companyService.getList;
       }
     });
   }

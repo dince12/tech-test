@@ -1,0 +1,63 @@
+<div class="modal-header d-flex">
+  <h1 class="modal-header-text">{{ title }}</h1>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="companyForm" class="d-flex flex-column">
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Company Name</span>
+      </div>
+      <input type="text" formControlName="companyName" class="form-control"
+             placeholder="Company Name" aria-label="Company Name" aria-describedby="basic-addon1">
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Company sector</span>
+      </div>
+      <input type="text" formControlName="sector" class="form-control"
+             placeholder="Sector" aria-label="Sector" aria-describedby="basic-addon1">
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Creation day</span>
+      </div>
+      <input type="text" formControlName="creationDay" class="form-control"
+             placeholder="Creation day" aria-label="Company creation day" aria-describedby="basic-addon1">
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Company country</span>
+      </div>
+      <input type="text" formControlName="country" class="form-control"
+             placeholder="Company country" aria-label="Company creation day" aria-describedby="basic-addon1">
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Company customers</span>
+      </div>
+      <input type="number" formControlName="customers" class="form-control"
+             placeholder="Company customers" aria-label="Company creation day" aria-describedby="basic-addon1">
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Company active</span>
+      </div>
+      <input type="text" formControlName="active" class="form-control"
+             placeholder="Company active" aria-label="Company creation day" aria-describedby="basic-addon1">
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <div class="d-flex justify-content-between w-100">
+    <button (click)="activeModal.close()" class="btn btn-outline-dark">Close</button>
+    <button (click)="addCompany()" [disabled]="!companyForm.valid" class="btn btn-primary">Save</button>
+  </div>
+</div>
